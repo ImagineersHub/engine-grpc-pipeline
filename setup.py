@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='unity-grpc-build-pipeline',
-    version='0.0.1',
+    version='0.0.2',
     license='MIT',
     description='grpc pipeline interfaces',
     author='esun',
@@ -14,8 +14,7 @@ setup(
         'grpcio==1.50.0',
         'grpcio-tools==1.50.0',
         'protobuf==4.21.8',
-        'betterproto[compiler]>=2.0.*',
-        'git+https://github.com/ImagineersHub/unity-grpc-build-proto-pipe.git'],
+        'betterproto[compiler]>=2.0.*'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Programming Language :: Python :: 3.10'
