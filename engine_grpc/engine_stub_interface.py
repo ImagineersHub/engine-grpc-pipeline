@@ -29,7 +29,6 @@ class GRPCInterface(Enum):
 
     # material utilities
     method_unity_material_update_textures = auto()
-    method_unity_material_update_alpha_and_color = auto()
 
 
 INTERFACE_MAPPINGS = {
@@ -83,8 +82,5 @@ INTERFACE_MAPPINGS = {
     # Material utilities
     GRPCInterface.method_unity_material_update_textures: {
         EnginePlatform.unity: "UGrpc.MaterialUtils.UpdateTextures"
-    },
-    GRPCInterface.method_unity_material_update_alpha_and_color: {
-        EnginePlatform.unity: "UGrpc.MaterialUtils.UpdateAlphaAndColor"
     }
 }
