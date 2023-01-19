@@ -1,6 +1,7 @@
-from utils.singleton import SingletonABCMeta
 from abc import ABC, abstractmethod
 from enum import Enum
+
+from .utils.singleton import SingletonABCMeta
 
 
 class EnginePlatform(Enum):

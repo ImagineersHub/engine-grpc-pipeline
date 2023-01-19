@@ -2,15 +2,12 @@ from __future__ import annotations
 
 import asyncio
 from dataclasses import dataclass
-from utils.singleton import SingletonABCMeta
 
 from compipe.runtime_env import Environment as env
 from compipe.utils.logging import logger
 from grpclib.client import Channel
 from grpclib.config import Configuration
 from ugrpc_pipe import UGrpcPipeStub
-
-from utils.const_keys import ARG_GRPC_CHANNEL
 
 from .engine_pipe_abstract import EngineAbstract, EnginePlatform
 
