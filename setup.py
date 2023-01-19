@@ -20,8 +20,8 @@ setup(
     ],
     dependency_links=[
         # Make sure to include the `#egg` portion so the `install_requires` recognizes the package
-        'git+https://github.com/ImagineersHub/unity-grpc-build-proto-pipe.git#egg=ugrpc_pipe',
-        'git+https://github.com/ImagineersHub/compipe.git#egg=compipe',
+        'git+https://github.com/ImagineersHub/unity-grpc-build-proto-pipe.git@main#egg=ugrpc_pipe',
+        'git+https://github.com/ImagineersHub/compipe.git@main#egg=compipe',
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
