@@ -31,17 +31,6 @@ class GRPCInterface(Enum):
     method_unity_material_update_textures = auto()
     method_unity_material_update_alpha_and_color = auto()
 
-    # syngar integration
-    method_syngar_integ_create_mesh_group = auto()
-    method_syngar_integ_integrate_models = auto()
-    method_syngar_integ_initialize_model_view_buttons = auto()  # add dicom viewer buttons to the bottom mainMenu
-    method_syngar_integ_initialize_dicom_view_buttons = auto()  # add dicom viewer buttons to the bottom mainMenu
-    method_syngar_integ_integrate_bottom_menu = auto()
-    method_syngar_integ_initialize_dicom_viewer = auto()
-    method_syngar_integ_integrate_dicom_viewer = auto()
-    method_syngar_integ_initialize_dicom_widget = auto()
-    method_syngar_integ_integrate_dicom_widget = auto()
-
 
 INTERFACE_MAPPINGS = {
     GRPCInterface.method_system_get_projectinfo: {
