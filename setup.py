@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='unity-grpc-build-pipeline',
-    version='0.0.4',
+    version='0.0.6',
     license='MIT',
     description='grpc pipeline interfaces',
     author='esun',
