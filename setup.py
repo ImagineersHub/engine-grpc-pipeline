@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='engine-grpc-pipeline',
-    version='0.0.14',
+    version='0.0.15',
     license='MIT',
     description='grpc pipeline interfaces',
     author='esun',
@@ -15,13 +15,8 @@ setup(
         'grpcio-tools==1.50.0',
         'protobuf==4.21.8',
         'betterproto[compiler]>=2.0.*',
-        'ugrpc_pipe',
-        'compipe'
-    ],
-    dependency_links=[
-        # Make sure to include the `#egg` portion so the `install_requires` recognizes the package
-        'git+https://github.com/ImagineersHub/unity-grpc-build-proto-pipe.git@main#egg=ugrpc_pipe',
-        'git+https://github.com/ImagineersHub/compipe.git@main#egg=compipe',
+        'ugrpc_pipe @ git+https://github.com/ImagineersHub/unity-grpc-build-proto-pipe.git@main#egg=ugrpc_pipe',
+        'compipe @ git+https://github.com/ImagineersHub/compipe.git@main#egg=compipe'
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
