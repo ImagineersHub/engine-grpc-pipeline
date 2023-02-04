@@ -17,7 +17,7 @@ class GRPCInterface(Enum):
     method_unity_editor_assetdatabase_refresh = auto()
     method_unity_editor_assetdatabase_copy_asset = auto()
     method_unity_editor_assetdatabase_guid_to_path = auto()
-    method_unity_editor_assetdatabase_search_assets = auto()
+    method_unity_editor_assetdatabase_find_assets = auto()
 
     method_unity_editor_scenemanager_open = auto()
     method_unity_editor_scenemanager_save = auto()
@@ -58,8 +58,8 @@ INTERFACE_MAPPINGS = {
     GRPCInterface.method_unity_editor_assetdatabase_guid_to_path: {
         EnginePlatform.unity: "UnityEditor.AssetDatabase.GUIDToAssetPath"
     },
-    GRPCInterface.method_unity_editor_assetdatabase_search_assets: {
-        EnginePlatform.unity: "UnityEditor.AssetDatabase.SearchAssets"
+    GRPCInterface.method_unity_editor_assetdatabase_find_assets: {
+        EnginePlatform.unity: "UnityEditor.AssetDatabase.FindAssets"
     },
 
     # Prefab utilities
