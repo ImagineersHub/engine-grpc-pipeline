@@ -15,7 +15,7 @@ setup(
         'grpcio-tools==1.50.0',
         'protobuf==4.21.8',
         'betterproto[compiler]>=2.0.*',
-        'unity-grpc-build-proto-pipe @ git+https://github.com/ImagineersHub/unity-grpc-build-proto-pipe.git@main#egg=ugrpc_pipe',
+        'ugrpc_pipe @ git+https://github.com/ImagineersHub/unity-grpc-build-proto-pipe.git@main#egg=ugrpc_pipe',
         'compipe @ git+https://github.com/ImagineersHub/compipe.git@main#egg=compipe'
     ],
     classifiers=[
