@@ -7,6 +7,8 @@ from typing import Any, List
 
 from betterproto import Message
 from compipe.utils.logging import logger
+from google.protobuf import any_pb2
+from google.protobuf.struct_pb2 import ListValue
 from ugrpc_pipe import (CommandParserReq, GenericResp, ProjectInfoResp,
                         UGrpcPipeStub)
 
@@ -14,6 +16,8 @@ from .engine_pipe_abstract import EngineAbstract, EnginePlatform
 from .engine_pipe_decorator import grpc_call_general
 from .engine_stub_interface import (GRPC_INTERFACE_METHOD_HEADER,
                                     INTERFACE_MAPPINGS, GRPCInterface)
+from betterproto.lib.google import protobuf
+from google.protobuf import wrappers_pb2, struct_pb2
 
 
 class BaseEngineImpl(EngineAbstract):
@@ -39,6 +43,40 @@ class BaseEngineImpl(EngineAbstract):
     @property
     def engine_platform(self) -> EnginePlatform:
         raise NotImplementedError
+
+    @classmethod
+    def unpack(cls, data: protobuf.Any) -> Any:
+        any_obj = any_pb2.Any()
+        any_obj.type_url = data.type_url
+        any_obj.value = data.value
+        if any_obj.Is(wrappers_pb2.StringValue.DESCRIPTOR):
+            unpacked_str_value = wrappers_pb2.StringValue()
+            any_obj.Unpack(unpacked_str_value)
+            return unpacked_str_value.value
+        elif any_obj.Is(struct_pb2.ListValue.DESCRIPTOR):
+            results = []
+            unpacked_list_value = struct_pb2.ListValue()
+            any_obj.Unpack(unpacked_list_value)
+            for value in unpacked_list_value.values:
+                field = value.WhichOneof('kind')
+                if field == 'number_value':
+                    results.append(value.number_value)
+                elif field == 'string_value':
+                    results.append(value.string_value)
+                elif field == 'bool_value':
+                    results.append(value.bool_value)
+            return results
+        elif any_obj.Is(wrappers_pb2.Int32Value.DESCRIPTOR):
+            unpacked_int_value = wrappers_pb2.Int32Value()
+            any_obj.Unpack(unpacked_int_value)
+            return unpacked_int_value.value
+        elif any_obj.Is(wrappers_pb2.BoolValue):
+            unpacked_bool_value = wrappers_pb2.BoolValue()
+            any_obj.Unpack(unpacked_bool_value)
+            return unpacked_bool_value.value
+        else:
+            logger.warning(f"Not found matched data type to unpack: {any_obj.DESCRIPTOR}")
+            return None
 
 
 class SimulationEngineImpl(BaseEngineImpl):
@@ -99,15 +137,18 @@ class SimulationEngineImpl(BaseEngineImpl):
         )
 
         if not return_type:
-            return resp
+            if isinstance(resp.payload, protobuf.Any):
+                resp.payload = BaseEngineImpl.unpack(resp.payload)
+                return resp
+        else:
+            if not issubclass(type(return_type), Message):
+                raise ValueError("The specified return_type should be a subclass of [betterproto.Message]")
+
             # # try to cast payload into the specific type
             # caller_code_obj = inspect.stack()[2].frame.f_code
             # # retrieve function from the gc referrers list
             # upper_callers = [obj for obj in gc.get_referrers(caller_code_obj) if hasattr(
             #     obj, '__code__') and obj.__code__ is caller_code_obj][0]
-
-        if not issubclass(return_type, Message):
-            raise ValueError("The specified return_type should be a subclass of [betterproto.Message]")
 
         # support casting into the message object
         return return_type().parse(resp.payload.value)
