@@ -16,8 +16,11 @@ class GRPCInterface(Enum):
     method_unity_editor_move_asset = auto()
     method_unity_editor_assetdatabase_refresh = auto()
     method_unity_editor_assetdatabase_copy_asset = auto()
+    method_unity_editor_assetdatabase_guid_to_path = auto()
+    method_unity_editor_assetdatabase_search_assets = auto()
 
     method_unity_editor_scenemanager_open = auto()
+    method_unity_editor_scenemanager_save = auto()
 
     # prefab utilities
     method_unity_prefab_create = auto()
@@ -52,6 +55,12 @@ INTERFACE_MAPPINGS = {
     GRPCInterface.method_unity_editor_assetdatabase_copy_asset: {
         EnginePlatform.unity: "UnityEditor.AssetDatabase.CopyAsset"
     },
+    GRPCInterface.method_unity_editor_assetdatabase_guid_to_path: {
+        EnginePlatform.unity: "UnityEditor.AssetDatabase.GUIDToAssetPath"
+    },
+    GRPCInterface.method_unity_editor_assetdatabase_search_assets: {
+        EnginePlatform.unity: "UnityEditor.AssetDatabase.SearchAssets"
+    },
 
     # Prefab utilities
     GRPCInterface.method_unity_prefab_create: {
@@ -77,7 +86,9 @@ INTERFACE_MAPPINGS = {
     GRPCInterface.method_unity_editor_scenemanager_open: {
         EnginePlatform.unity: "UnityEditor.SceneManagement.EditorSceneManager.OpenScene"
     },
-
+    GRPCInterface.method_unity_editor_scenemanager_save: {
+        EnginePlatform.unity: "UnityEditor.SceneManagement.EditorSceneManager.SaveScene"
+    },
 
     # Material utilities
     GRPCInterface.method_unity_material_update_textures: {

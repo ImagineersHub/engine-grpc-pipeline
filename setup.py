@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='engine-grpc-pipeline',
-    version='0.0.18',
+    version='0.0.19',
     license='MIT',
     description='grpc pipeline interfaces',
     author='esun',
