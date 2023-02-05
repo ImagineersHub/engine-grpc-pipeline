@@ -3,6 +3,7 @@ from ..engine_pipe_abstract import EnginePlatform
 from typing import List
 from ..engine_stub_interface import GRPCInterface
 from ugrpc_pipe import ProjectInfoResp
+import os
 
 
 class UnityEngineImpl(SimulationEngineImpl):
@@ -38,3 +39,9 @@ class UnityEngineImpl(SimulationEngineImpl):
 
     def get_project_info(self) -> ProjectInfoResp:
         return self.command_parser(cmd=GRPCInterface.method_system_get_projectinfo).payload
+
+    def fetch_full_path(self, path: str) -> str:
+        if not path.startswith(self.asset_root_folder_name):
+            raise ValueError(f"The specified path is invalid: {path}. Path should start with '{self.asset_root_folder_name}'")
+
+        return os.path.join(self.get_project_info().project_root, path)
