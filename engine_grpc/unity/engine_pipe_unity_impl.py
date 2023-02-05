@@ -2,6 +2,7 @@ from ..engine_pipe_impl import SimulationEngineImpl
 from ..engine_pipe_abstract import EnginePlatform
 from typing import List
 from ..engine_stub_interface import GRPCInterface
+from ugrpc_pipe import ProjectInfoResp
 
 
 class UnityEngineImpl(SimulationEngineImpl):
@@ -34,3 +35,6 @@ class UnityEngineImpl(SimulationEngineImpl):
     def get_dependencies(self, path: str, recursive: bool) -> List[str]:
 
         return self.command_parser(cmd=GRPCInterface.method_unity_editor_assetdatabase_get_dependencies, params=[path, recursive]).payload
+
+    def get_project_info(self) -> ProjectInfoResp:
+        return self.command_parser(cmd=GRPCInterface.method_system_get_projectinfo).payload
