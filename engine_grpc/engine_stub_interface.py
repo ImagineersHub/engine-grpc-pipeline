@@ -30,6 +30,7 @@ class GRPCInterface(Enum):
     method_unity_prefab_set_value = auto()
     method_unity_prefab_set_reference_value = auto()
     method_unity_prefab_create_mesh_collider_object = auto()
+    method_unity_prefab_create_variant = auto()
 
     # material utilities
     method_unity_material_update_textures = auto()
@@ -84,6 +85,9 @@ INTERFACE_MAPPINGS = {
     },
     GRPCInterface.method_unity_prefab_create_mesh_collider_object: {
         EnginePlatform.unity: "UGrpc.PrefabUtils.CreateMeshColliderObject"
+    },
+    GRPCInterface.method_unity_prefab_create_variant: {
+        EnginePlatform.unity: "UGrpc.PrefabUtils.CreatePrefabVariant"
     },
 
     # Scene manager
