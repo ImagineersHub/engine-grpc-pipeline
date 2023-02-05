@@ -9,7 +9,7 @@ from grpclib.client import Channel
 from grpclib.config import Configuration
 from ugrpc_pipe import UGrpcPipeStub
 
-from .engine_pipe_abstract import EngineAbstract, EnginePlatform
+from .engine_pipe_abstract import EngineAbstract
 
 
 @dataclass
@@ -19,8 +19,8 @@ class GrpcChannelConfig:
     max_msg_length: int
 
     @classmethod
-    def retrieve_grpc_cfg(cls, engine: EnginePlatform) -> GrpcChannelConfig:
-        if (grpc_cfg_json := env().get_value_by_path(['grpc', engine.name], None)) == None:
+    def retrieve_grpc_cfg(cls, engine: str) -> GrpcChannelConfig:
+        if (grpc_cfg_json := env().get_value_by_path(['grpc', engine], None)) == None:
             raise ValueError(f"Not found matched grpc config for engine: {engine}")
 
         return GrpcChannelConfig(**grpc_cfg_json)

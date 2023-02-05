@@ -13,9 +13,9 @@ class UnityEngineImpl(SimulationEngineImpl):
     asset_root_folder_name: str = "Assets"
 
     @property
-    def engine_platform(self) -> EnginePlatform:
+    def engine_platform(self) -> str:
 
-        return EnginePlatform.unity
+        return EnginePlatform.unity.name
 
     def find_asset_guid_list(self, filter: str, paths: List[str]) -> List[str]:
 

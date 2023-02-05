@@ -41,7 +41,7 @@ class BaseEngineImpl(EngineAbstract):
         self._event_loop = value
 
     @property
-    def engine_platform(self) -> EnginePlatform:
+    def engine_platform(self) -> str:
         raise NotImplementedError
 
     @classmethod
@@ -100,7 +100,7 @@ class SimulationEngineImpl(BaseEngineImpl):
     def resolve_command_name(self, cmd: GRPCInterface):
         if cmd not in INTERFACE_MAPPINGS:
             raise KeyError("Not found the specific key: {cmd}")
-        return INTERFACE_MAPPINGS[cmd][self.engine_platform]
+        return INTERFACE_MAPPINGS[cmd][EnginePlatform(self.engine_platform)]
 
     @grpc_call_general()
     def command_parser(self, cmd: GRPCInterface, params: List = [], return_type: Any = None, verbose: bool = False) -> GenericResp:

@@ -27,5 +27,5 @@ class EngineAbstract(ABC):
 
     @property
     @abstractmethod
-    def engine_platform(self) -> EnginePlatform:
+    def engine_platform(self) -> str:
         raise NotImplementedError
