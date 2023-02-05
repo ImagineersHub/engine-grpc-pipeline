@@ -4,6 +4,8 @@ from typing import List
 from ..engine_stub_interface import GRPCInterface
 from ugrpc_pipe import ProjectInfoResp
 import os
+import re
+from re import Pattern
 
 
 class UnityEngineImpl(SimulationEngineImpl):
@@ -32,6 +34,16 @@ class UnityEngineImpl(SimulationEngineImpl):
             asset_paths.append(self.command_parser(cmd=GRPCInterface.method_editor_assetdatabase_guid_to_path, params=[guid]).payload)
 
         return asset_paths
+
+    def find_assets_by_regex(self, filter: str, paths: List[str], pattern: Pattern) -> List[str]:
+
+        assets = self.find_assets(filter=filter, paths=paths)
+        result = []
+        for asset_path in assets:
+            if pattern.search(asset_path, re.IGNORECASE):
+                result.append(asset_path)
+
+        return result
 
     def get_dependencies(self, path: str, recursive: bool) -> List[str]:
 
