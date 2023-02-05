@@ -13,7 +13,7 @@ class UnityEngineImpl(SimulationEngineImpl):
 
         return EnginePlatform.unity
 
-    def find_asset_guids(self, filter: str, paths: List[str]) -> List[str]:
+    def find_asset_guid_list(self, filter: str, paths: List[str]) -> List[str]:
 
         resp = self.command_parser(cmd=GRPCInterface.method_unity_editor_assetdatabase_find_assets,
                                    params=[filter,
@@ -22,11 +22,15 @@ class UnityEngineImpl(SimulationEngineImpl):
 
     def find_assets(self, filter: str, paths: List[str]) -> List[str]:
 
-        guids = self.find_asset_guids(filter=filter, paths=paths)
+        guid_list = self.find_asset_guid_list(filter=filter, paths=paths)
 
         asset_paths = []
 
-        for guid in guids:
+        for guid in guid_list:
             asset_paths.append(self.command_parser(cmd=GRPCInterface.method_unity_editor_assetdatabase_guid_to_path, params=[guid]).payload)
 
         return asset_paths
+
+    def get_dependencies(self, path: str, recursive: bool) -> List[str]:
+
+        return self.command_parser(cmd=GRPCInterface.method_unity_editor_assetdatabase_get_dependencies, params=[path, recursive]).payload
