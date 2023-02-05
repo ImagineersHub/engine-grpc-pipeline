@@ -1,21 +1,21 @@
 
 ### Command interface examples
 
-UEI().command_parser(cmd=GRPCInterface.method_unity_prefab_add_component,
+UEI().command_parser(cmd=GRPCInterface.method_object_add_component,
                      params=[
                          target,
                          ASSEMBLE_NEARINTERACTIONGRABBABLE,
                          True
                      ])
 
-UEI().command_parser(cmd=GRPCInterface.method_unity_prefab_add_component,
+UEI().command_parser(cmd=GRPCInterface.method_object_add_component,
                      params=[
                          target,
                          ASSEMBLE_MESHCOLLIDER,
                          True
                      ])
 
-UEI().command_parser(cmd=GRPCInterface.method_unity_prefab_set_reference_value,
+UEI().command_parser(cmd=GRPCInterface.method_object_set_reference_value,
                      params=[
                          collision_mesh_asset,
                          ASSETBLE_MESHFILTER,
@@ -25,7 +25,7 @@ UEI().command_parser(cmd=GRPCInterface.method_unity_prefab_set_reference_value,
                          "sharedMesh"
                      ])
 
-UEI().command_parser(cmd=GRPCInterface.method_unity_prefab_set_value,
+UEI().command_parser(cmd=GRPCInterface.method_object_set_value,
                      params=[
 
                          target,
