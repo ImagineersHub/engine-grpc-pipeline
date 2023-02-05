@@ -100,7 +100,9 @@ class SimulationEngineImpl(BaseEngineImpl):
     def resolve_command_name(self, cmd: GRPCInterface):
         if cmd not in INTERFACE_MAPPINGS:
             raise KeyError("Not found the specific key: {cmd}")
-        return INTERFACE_MAPPINGS[cmd][EnginePlatform(self.engine_platform)]
+        if (command_str := INTERFACE_MAPPINGS[cmd].get(EnginePlatform[self.engine_platform], None)) == None:
+            raise ValueError(f"Not found the matched command: {cmd}: {self.engine_platform}")
+        return command_str
 
     @grpc_call_general()
     def command_parser(self, cmd: GRPCInterface, params: List = [], return_type: Any = None, verbose: bool = False) -> GenericResp:
