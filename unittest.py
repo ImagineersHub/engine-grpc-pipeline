@@ -11,6 +11,6 @@ Environment.append_server_config(payload=server_config)
 
 
 if __name__ == "__main__":
-    result = UEI().find_assets(filter="", paths=["Assets/Content"])
+    result = UEI().find_assets(filter="t:prefab", paths=["Assets/Content/HKG/Dev/Case0011/model"])
 
     print(result)
