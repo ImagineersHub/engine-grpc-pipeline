@@ -40,7 +40,7 @@ class UnityEngineImpl(SimulationEngineImpl):
         assets = self.find_assets(filter=filter, paths=paths)
         result = []
         for asset_path in assets:
-            if pattern.search(asset_path, re.IGNORECASE):
+            if pattern.search(asset_path):
                 result.append(asset_path)
 
         return result
