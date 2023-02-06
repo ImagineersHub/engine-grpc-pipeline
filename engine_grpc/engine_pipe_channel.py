@@ -37,7 +37,7 @@ class base_channel(object):
         if not self.channel:
             self.grpc_cfg: GrpcChannelConfig = GrpcChannelConfig.retrieve_grpc_cfg(engine=self.engine.engine_platform)
             self.channel = self.grpc_cfg.channel
-            logger.warning(f"Initialize gRPC channel by passing default values {self.channel}")
+            # logger.warning(f"Initialize gRPC channel by passing default values {self.channel}")
 
         if ':' not in self.channel:
             raise ValueError('The specified channel content is invalid. Only accept format <ip>:<port> e.g., 127.0.0.1:50051')
