@@ -50,7 +50,8 @@ class UnityEngineImpl(SimulationEngineImpl):
         return self.command_parser(cmd=GRPCInterface.method_editor_assetdatabase_get_dependencies, params=[path, recursive]).payload
 
     def get_project_info(self) -> ProjectInfoResp:
-        return self.command_parser(cmd=GRPCInterface.method_system_get_projectinfo).payload
+
+        return self.command_parser(cmd=GRPCInterface.method_system_get_projectinfo)
 
     def fetch_full_path(self, path: str) -> str:
         if not path.startswith(self.asset_root_folder_name):

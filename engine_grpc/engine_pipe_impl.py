@@ -70,7 +70,7 @@ class BaseEngineImpl(EngineAbstract):
             unpacked_int_value = wrappers_pb2.Int32Value()
             any_obj.Unpack(unpacked_int_value)
             return unpacked_int_value.value
-        elif any_obj.Is(wrappers_pb2.BoolValue):
+        elif any_obj.Is(wrappers_pb2.BoolValue.DESCRIPTOR):
             unpacked_bool_value = wrappers_pb2.BoolValue()
             any_obj.Unpack(unpacked_bool_value)
             return unpacked_bool_value.value
@@ -138,13 +138,16 @@ class SimulationEngineImpl(BaseEngineImpl):
             self.stub.command_parser(CommandParserReq(payload=json.dumps(payload)))
         )
 
-        if not return_type:
-            if isinstance(resp.payload, protobuf.Any):
-                resp.payload = BaseEngineImpl.unpack(resp.payload)
-                return resp
+        return_resp = None
+
+        if not return_type and isinstance(resp.payload, protobuf.Any):
+            resp.payload = BaseEngineImpl.unpack(resp.payload)
+            return_resp = resp
         else:
-            if not issubclass(type(return_type), Message):
-                raise ValueError("The specified return_type should be a subclass of [betterproto.Message]")
+            try:
+                return_resp = return_type().parse(resp.payload.value)
+            except:
+                pass
 
             # # try to cast payload into the specific type
             # caller_code_obj = inspect.stack()[2].frame.f_code
@@ -153,7 +156,7 @@ class SimulationEngineImpl(BaseEngineImpl):
             #     obj, '__code__') and obj.__code__ is caller_code_obj][0]
 
         # support casting into the message object
-        return return_type().parse(resp.payload.value)
+        return return_resp
 
     @grpc_call_general()
     def get_project_info(self, is_reload: bool = False) -> ProjectInfoResp:
