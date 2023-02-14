@@ -3,7 +3,7 @@
         "grpc": {
             "unity": {
                 "description": "message_length = 100*1024*1024",
-                "channel": "127.0.0.1:50062",
+                "channel": "127.0.0.1:50061",
                 "max_msg_length": 104857600
             }
         }
@@ -12,7 +12,7 @@
         "grpc": {
             "unity": {
                 "description": "message_length = 100*1024*1024",
-                "channel": "127.0.0.1:50062",
+                "channel": "127.0.0.1:50061",
                 "max_msg_length": 104857600
             }
         }

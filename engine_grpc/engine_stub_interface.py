@@ -37,6 +37,8 @@ class GRPCInterface(Enum):
     # material utilities
     method_material_update_textures = auto()
 
+    method_unittest_get_float_array_data = auto()
+
 
 INTERFACE_MAPPINGS = {
     GRPCInterface.method_system_get_projectinfo: {
@@ -114,7 +116,10 @@ INTERFACE_MAPPINGS = {
     # Scene utilities
     GRPCInterface.method_material_update_textures: {
         EnginePlatform.unity: "UGrpc.MaterialUtils.UpdateTextures"
+    },
+
+    # UnitTest utilities
+    GRPCInterface.method_unittest_get_float_array_data: {
+        EnginePlatform.unity: "UGrpc.UnitTestUtils.GetFloatArrayData"
     }
-
-
 }
