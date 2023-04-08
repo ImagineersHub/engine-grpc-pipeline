@@ -11,6 +11,11 @@ Environment.append_server_config(payload=server_config)
 
 
 if __name__ == "__main__":
-    result = UEI().command_parser(cmd=GI.method_unittest_get_float_array_data, return_type=FloatArrayRep)
+    result = UEI().command_parser(
+        cmd=GI.method_scene_create,
+        params=[
+            "Assets/Content/Scene/test.unity",
+            []
+        ])
 
     print(result.values)
