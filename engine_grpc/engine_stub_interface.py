@@ -27,7 +27,34 @@ class GRPCInterface(Enum):
     method_object_create = auto()
     method_object_merge = auto()
     method_object_add_component = auto()
+    """Represent the interface of adding component to the specific gameobject
+    
+    Example:
+        PrefabUtils.AddComponent(
+            source: "Assets/Content/Test.prefab",
+            componentPath: "default/UnityEngine.MeshCollider, UnityEngine",
+            isCreate: true
+        );
+
+    'default' is child object name. specify the component type full name and namespace
+
+    """
+
     method_object_change_activate = auto()
+    """Represent the interface of changing the activate state of gameobject or component.
+    
+    Example:
+        PrefabUtils.ChangeActivate(
+            source: "Assets/Content/Test.prefab",
+            path: "default/UnityEngine.MeshRenderer, UnityEngine",
+            isActive: true
+        );
+
+    'default' is child object name and the following is the component info. If there was no
+    component specified, it would apply the activating on the gameobject only.
+
+    """
+
     method_object_set_value = auto()
     method_object_set_reference_value = auto()
     method_object_create_mesh_collider_object = auto()
