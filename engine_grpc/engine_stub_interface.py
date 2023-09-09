@@ -27,6 +27,7 @@ class GRPCInterface(Enum):
     method_object_create = auto()
     method_object_merge = auto()
     method_object_add_component = auto()
+    method_object_change_activate = auto()
     method_object_set_value = auto()
     method_object_set_reference_value = auto()
     method_object_create_mesh_collider_object = auto()
@@ -80,6 +81,9 @@ INTERFACE_MAPPINGS = {
     },
     GRPCInterface.method_object_add_component: {
         EnginePlatform.unity: "UGrpc.PrefabUtils.AddComponent"
+    },
+    GRPCInterface.method_object_change_activate: {
+        EnginePlatform.unity: "UGrpc.PrefabUtils.ChangeActivate"
     },
     GRPCInterface.method_object_set_value: {
         EnginePlatform.unity: "UGrpc.PrefabUtils.SetValue"
