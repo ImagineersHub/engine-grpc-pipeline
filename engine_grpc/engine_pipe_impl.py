@@ -127,7 +127,7 @@ class SimulationEngineImpl(BaseEngineImpl):
             'type': type_name,
             'isMethod': is_method,
             'method': method_name[1:],  # remove the '.' from method name segment
-            'parameters': [value for value in map(lambda n: '%@%'.join(n) if isinstance(n, List) else n, params)]
+            'parameters': [value for value in map(lambda n: '%@%'.join(str(n)) if isinstance(n, List) else n, params)]
         }
 
         if verbose:
