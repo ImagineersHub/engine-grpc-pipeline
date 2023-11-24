@@ -17,7 +17,7 @@ def grpc_call_general(channel: str = None):
         with general_channel(engine=engine_impl, channel=channel):
             resp = wrapped(**kwds)
             # check the status code if the resp is an instance of GenericResp
-            if hasattr(resp, 'status') and resp.status:
+            if hasattr(resp, 'status') and resp.status.code != 0:
                 logger.error(resp.status.message)
                 logger.error(kwds)
 
