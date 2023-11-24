@@ -8,6 +8,7 @@ GRPC_INTERFACE_PROPERTY_HEADER = 'property'
 class GRPCInterface(Enum):
 
     # declare method interface
+    method_system_get_service_status = auto()
     method_system_get_projectinfo = auto()
     method_scene_create = auto()
 
@@ -69,6 +70,9 @@ class GRPCInterface(Enum):
 
 
 INTERFACE_MAPPINGS = {
+    GRPCInterface.method_system_get_service_status: {
+        EnginePlatform.unity: "UGrpc.SystemUtils.GetServiceStatus"
+    },
     GRPCInterface.method_system_get_projectinfo: {
         EnginePlatform.unity: "UGrpc.SystemUtils.GetProjectInfo"
     },
