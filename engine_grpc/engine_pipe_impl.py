@@ -3,7 +3,7 @@ import json
 import os
 import re
 from asyncio import AbstractEventLoop
-from typing import Any, List
+from typing import Any, List, Optional
 
 from betterproto import Message
 from compipe.utils.logging import logger
@@ -75,7 +75,8 @@ class BaseEngineImpl(EngineAbstract):
             any_obj.Unpack(unpacked_bool_value)
             return unpacked_bool_value.value
         else:
-            logger.warning(f"Not found matched data type to unpack: {any_obj.DESCRIPTOR}")
+            logger.warning(
+                f"Not found matched data type to unpack: {any_obj.DESCRIPTOR}")
             return None
 
 
@@ -101,11 +102,19 @@ class SimulationEngineImpl(BaseEngineImpl):
         if cmd not in INTERFACE_MAPPINGS:
             raise KeyError("Not found the specific key: {cmd}")
         if (command_str := INTERFACE_MAPPINGS[cmd].get(EnginePlatform[self.engine_platform], None)) == None:
-            raise ValueError(f"Not found the matched command: {cmd}: {self.engine_platform}")
+            raise ValueError(
+                f"Not found the matched command: {cmd}: {self.engine_platform}")
         return command_str
 
+    def command_parser_request(self, cmd: GRPCInterface, params: List = []) -> CommandParserReq:
+
+        return CommandParserReq(payload=json.dumps({
+            'type': self.resolve_command_name(cmd=cmd),
+            'parameters': params
+        }))
+
     @grpc_call_general()
-    def command_parser(self, cmd: GRPCInterface, params: List = [], return_type: Any = None, verbose: bool = False) -> GenericResp:
+    def command_parser(self, cmd: GRPCInterface, params: List = [], return_type: Any = None, verbose: bool = False, timeout: Optional[float] = None) -> GenericResp:
 
         logger.debug(f"Execute command: {cmd.name} : {params}")
 
@@ -114,7 +123,8 @@ class SimulationEngineImpl(BaseEngineImpl):
 
         # parse command mode: method/property(static)
         # to involve the correct way to call through reflection
-        is_method: bool = bool(re.match(fr'{GRPC_INTERFACE_METHOD_HEADER}_.*', cmd.name, re.IGNORECASE))
+        is_method: bool = bool(
+            re.match(fr'{GRPC_INTERFACE_METHOD_HEADER}_.*', cmd.name, re.IGNORECASE))
 
         # parse the module type name and method name from the full command str
         # i.e., UGrpc.SystemUtils.GetProjectInfo
@@ -126,17 +136,19 @@ class SimulationEngineImpl(BaseEngineImpl):
         payload = {
             'type': type_name,
             'isMethod': is_method,
-            'method': method_name[1:],  # remove the '.' from method name segment
+            # remove the '.' from method name segment
+            'method': method_name[1:],
             'parameters': [value for value in map(lambda n: '%@%'.join([str(v) for v in n]) if isinstance(n, List) else n, params)]
         }
 
+        command_parser_req = CommandParserReq(payload=json.dumps(payload))
+
         if verbose:
             logger.debug(f"Command command: {cmd}")
-            logger.debug(f"Command payload: {json.dumps(payload,indent=4)}")
+            logger.debug(f"Command payload: {command_parser_req.payload}")
 
         resp = self.event_loop.run_until_complete(
-            self.stub.command_parser(CommandParserReq(payload=json.dumps(payload)))
-        )
+            self.stub.command_parser(command_parser_req, timeout=timeout))
 
         return_resp = None
 
@@ -171,6 +183,16 @@ class SimulationEngineImpl(BaseEngineImpl):
         if not self._project_info or is_reload:
 
             # retrieve the project info from the engine / platform
-            self._project_info = self.command_parser(cmd=GRPCInterface.method_system_get_projectinfo, return_type=ProjectInfoResp)
+            self._project_info = self.command_parser(
+                cmd=GRPCInterface.method_system_get_projectinfo, return_type=ProjectInfoResp)
 
         return self._project_info
+
+    def get_service_status(self) -> bool:
+        try:
+            resp = self.command_parser(
+                cmd=GRPCInterface.method_system_get_service_status, return_type=GenericResp)
+            return True if resp.status == 0 else False
+
+        except Exception as e:
+            return False

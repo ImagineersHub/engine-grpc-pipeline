@@ -4,3 +4,4 @@ grpcio==1.50.0
 grpcio-tools==1.50.0
 protobuf==4.21.8
 betterproto[compiler]>=2.0.*
+psutil==5.9.6
