@@ -1,5 +1,5 @@
-git+https://github.com/ImagineersHub/unity-grpc-build-proto-pipe.git
-git+https://github.com/ImagineersHub/compipe.git
+ugrpc_pipe==0.1.0
+compipe
 grpcio==1.50.0
 grpcio-tools==1.50.0
 protobuf==4.21.8

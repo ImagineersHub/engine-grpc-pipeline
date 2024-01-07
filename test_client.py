@@ -3,12 +3,10 @@ from compipe.runtime_env import Environment
 from compipe.utils.io_helper import json_loader
 import os
 import sys
-from ugrpc_pipe import FloatArrayRep, GenericResp
+from ugrpc_pipe import FloatArrayRep, GenericResp, StringArrayRep
 import asyncio
 from grpclib.client import Channel
 from engine_grpc.engine_pipe_impl import BaseEngineImpl
-from engine_grpc.engine_pipe_server import run_grpc_server
-from engine_grpc.utils.sys_process import kill_process_by_name, get_process_name_lists
 
 from google.protobuf.any_pb2 import Any
 from google.protobuf.json_format import MessageToDict
@@ -23,7 +21,9 @@ Environment.append_server_config(payload=server_config)
 
 
 if __name__ == "__main__":
-    result = UEI().command_parser(
+    result = UEGI().command_parser(
         cmd=GI.method_runtime_fetch_scene_hierarchy,
-        params=[], timeout=3.0)
-    print(result.status)
+        params=[],
+        return_type=StringArrayRep,
+        timeout=3.0)
+    print(result.values)

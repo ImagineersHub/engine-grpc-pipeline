@@ -8,7 +8,7 @@
             },
             "unity": {
                 "description": "message_length = 100*1024*1024",
-                "channel": "127.0.0.1:50060",
+                "channel": "192.168.0.17:50060",
                 "max_msg_length": 104857600
             }
         }
