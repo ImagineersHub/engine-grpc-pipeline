@@ -2,9 +2,11 @@ from setuptools import setup, find_packages
 
 setup(
     name='engine_grpc',
-    version='0.2.0',
+    version='0.2.1',
     license='MIT',
     description='grpc pipeline interfaces',
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
     author='esun',
     author_email='esun@voteb.com',
     url='https://github.com/ImagineersHub/engine-grpc-pipeline',
@@ -15,7 +17,7 @@ setup(
         'grpcio-tools==1.50.0',
         'protobuf==4.21.8',
         'betterproto[compiler]==2.0.0b5',
-        'ugrpc_pipe==0.1.0',
+        'ugrpc_pipe==0.1.1',
         'compipe>=0.2.3'
     ],
     classifiers=[

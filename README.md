@@ -1,6 +1,7 @@
 
 ### Command interface examples
 
+```python
 UEI().command_parser(cmd=GRPCInterface.method_object_add_component,
                      params=[
                          target,
@@ -27,9 +28,9 @@ UEI().command_parser(cmd=GRPCInterface.method_object_set_reference_value,
 
 UEI().command_parser(cmd=GRPCInterface.method_object_set_value,
                      params=[
-
                          target,
                          ASSEMBLE_MESHCOLLIDER,
                          "convex",
                          True
                      ])
+```
