@@ -17,7 +17,7 @@ setup(
         'grpcio-tools==1.50.0',
         'protobuf==4.25.2',
         'betterproto[compiler]==2.0.0b5',
-        'ugrpc_pipe==0.1.1',
+        'ugrpc_pipe==0.1.2',
         'compipe>=0.2.3'
     ],
     classifiers=[
