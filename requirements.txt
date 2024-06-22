@@ -1,4 +1,4 @@
-ugrpc_pipe==0.1.9
+ugrpc_pipe
 compipe
 grpcio==1.50.0
 grpcio-tools==1.50.0
