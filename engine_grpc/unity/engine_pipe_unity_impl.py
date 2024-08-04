@@ -80,15 +80,17 @@ class UnityEditorImpl(SimulationEngineImpl):
 
     def wait_for_grpc_ready(
         self,
-        timeout: float = 15.0,
-        check_interval: int = 2
-    ) -> None:
-
-        start_time = time.monotonic()
-
-        while not self.get_service_status():
-            if time.monotonic() - start_time >= timeout:
-                raise TimeoutError(
-                    "Timeout while waiting for Unity Editor to launch")
-            # Reduced sleep interval for better responsiveness
-            time.sleep(check_interval)
+        timeout: float = 60.0,
+        check_interval: int = 15
+    ) -> bool:
+        while True:
+            if timeout <= 0:
+                return False
+            connected = self.get_service_status()
+            print(connected)
+            if connected:
+                break
+            else:
+                time.sleep(check_interval)
+                timeout -= check_interval
+        return True

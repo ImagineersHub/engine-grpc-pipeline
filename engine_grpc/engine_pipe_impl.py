@@ -194,5 +194,5 @@ class SimulationEngineImpl(BaseEngineImpl):
                 cmd=GRPCInterface.method_system_get_service_status, return_type=GenericResp)
             return True if resp.status.code == 0 else False
 
-        except Exception as e:
+        except:
             return False
