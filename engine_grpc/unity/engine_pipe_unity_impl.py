@@ -78,12 +78,17 @@ class UnityEditorImpl(SimulationEngineImpl):
         except grpclib.exceptions.StreamTerminatedError as e:
             print(e)
 
-    def wait_until_unity_editor_launched(self, timeout: float = 15.0) -> None:
+    def wait_for_grpc_ready(
+        self,
+        timeout: float = 15.0,
+        check_interval: int = 2
+    ) -> None:
+
+        start_time = time.monotonic()
 
         while not self.get_service_status():
-            time.sleep(1.0)
-            timeout -= 1.0
-
-            if timeout <= 0.0:
+            if time.monotonic() - start_time >= timeout:
                 raise TimeoutError(
-                    f"Timeout while waiting for Unity Editor launched")
+                    "Timeout while waiting for Unity Editor to launch")
+            # Reduced sleep interval for better responsiveness
+            time.sleep(check_interval)
