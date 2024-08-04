@@ -70,11 +70,12 @@ class UnityEditorImpl(SimulationEngineImpl):
 
         return os.path.join(self.get_project_info().project_root, path)
 
-    def quit_without_saving(self) -> None:
+    def quit_without_saving(self, waiting_time: int = 10) -> None:
 
         try:
             self.command_parser(
                 cmd=GRPCInterface.method_system_quit_without_saving)
+            time.sleep(waiting_time)
         except grpclib.exceptions.StreamTerminatedError as e:
             print(e)
 
