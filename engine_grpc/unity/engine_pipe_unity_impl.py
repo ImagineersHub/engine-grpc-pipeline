@@ -87,11 +87,11 @@ class UnityEditorImpl(SimulationEngineImpl):
         while True:
             if timeout <= 0:
                 return False
-            connected = self.get_service_status()
-            print(connected)
-            if connected:
+
+            time.sleep(check_interval)
+
+            if self.get_service_status():
                 break
             else:
-                time.sleep(check_interval)
                 timeout -= check_interval
         return True
