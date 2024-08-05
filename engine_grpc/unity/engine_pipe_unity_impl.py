@@ -95,3 +95,7 @@ class UnityEditorImpl(SimulationEngineImpl):
             else:
                 timeout -= check_interval
         return True
+
+    def refresh_asset_databse(self) -> GenericResp:
+
+        return self.command_parser(cmd=GRPCInterface.method_editor_assetdatabase_refresh)
