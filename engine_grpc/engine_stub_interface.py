@@ -16,8 +16,7 @@ class GRPCInterface(Enum):
     method_scene_create = auto()
 
     # UnityEditor built-in static method
-    method_editor_import_asset = auto()
-    method_editor_move_asset = auto()
+    method_editor_assetdatabase_move_asset = auto()
     method_editor_assetdatabase_refresh = auto()
     method_editor_assetdatabase_copy_asset = auto()
     method_editor_assetdatabase_guid_to_path = auto()
@@ -96,11 +95,8 @@ INTERFACE_MAPPINGS = {
     },
 
     # AssetDatabase
-    GRPCInterface.method_editor_move_asset: {
+    GRPCInterface.method_editor_assetdatabase_move_asset: {
         EnginePlatform.unity_editor: "UnityEditor.AssetDatabase.MoveAsset"
-    },
-    GRPCInterface.method_editor_import_asset: {
-        EnginePlatform.unity_editor: "UnityEditor.AssetDatabase.ImportAsset"
     },
     GRPCInterface.method_editor_assetdatabase_refresh: {
         EnginePlatform.unity_editor: "UnityEditor.AssetDatabase.Refresh"
