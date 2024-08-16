@@ -23,6 +23,7 @@ class GRPCInterface(Enum):
     method_editor_assetdatabase_guid_to_path = auto()
     method_editor_assetdatabase_find_assets = auto()
     method_editor_assetdatabase_get_dependencies = auto()
+    method_editor_assetdatabase_import_assets = auto()
 
     method_editor_scenemanager_open = auto()
     method_editor_scenemanager_save = auto()
@@ -115,6 +116,9 @@ INTERFACE_MAPPINGS = {
     },
     GRPCInterface.method_editor_assetdatabase_get_dependencies: {
         EnginePlatform.unity_editor: "UnityEditor.AssetDatabase.GetDependencies"
+    },
+    GRPCInterface.method_editor_assetdatabase_import_assets: {
+        EnginePlatform.unity_editor: "UnityEditor.AssetDatabase.ImportAsset"
     },
 
     # Prefab utilities
