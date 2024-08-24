@@ -162,11 +162,6 @@ INTERFACE_MAPPINGS = {
         EnginePlatform.unity_editor: "UGrpc.MaterialUtils.UpdateTextures"
     },
 
-    # Scene utilities
-    GRPCInterface.method_material_update_textures: {
-        EnginePlatform.unity_editor: "UGrpc.MaterialUtils.UpdateTextures"
-    },
-
     # UnitTest utilities
     GRPCInterface.method_unittest_get_float_array_data: {
         EnginePlatform.unity_editor: "UGrpc.UnitTestUtils.GetFloatArrayData"
