@@ -21,7 +21,8 @@ class GrpcChannelConfig:
     @classmethod
     def retrieve_grpc_cfg(cls, engine: str) -> GrpcChannelConfig:
         if (grpc_cfg_json := env().get_value_by_path(['grpc', engine], None)) == None:
-            raise ValueError(f"Not found matched grpc config for engine: {engine}")
+            raise ValueError(
+                f"Not found matched grpc config for engine: {engine}")
 
         return GrpcChannelConfig(**grpc_cfg_json)
 
@@ -34,13 +35,15 @@ class base_channel(object):
     channel: str
 
     def __post_init__(self):
+        self.grpc_cfg: GrpcChannelConfig = GrpcChannelConfig.retrieve_grpc_cfg(
+            engine=self.engine.engine_platform)
         if not self.channel:
-            self.grpc_cfg: GrpcChannelConfig = GrpcChannelConfig.retrieve_grpc_cfg(engine=self.engine.engine_platform)
-            self.channel = self.grpc_cfg.channel
+            self.grpc_cfg = self.channel
             # logger.warning(f"Initialize gRPC channel by passing default values {self.channel}")
 
         if ':' not in self.channel:
-            raise ValueError('The specified channel content is invalid. Only accept format <ip>:<port> e.g., 127.0.0.1:50051')
+            raise ValueError(
+                'The specified channel content is invalid. Only accept format <ip>:<port> e.g., 127.0.0.1:50051')
 
         # declare the maximum message length by passing the values from config
         cfg = Configuration(http2_stream_window_size=self.grpc_cfg.max_msg_length,
@@ -49,9 +52,9 @@ class base_channel(object):
         # parse host address and port from the specified channel definition
 
         host, port = tuple(self.channel.split(':'))
-
         # construct a channel instance
-        self.grpc_channel = Channel(host=host, port=port, config=cfg, loop=self.engine.event_loop)
+        self.grpc_channel = Channel(
+            host=host, port=port, config=cfg, loop=self.engine.event_loop)
 
     def __enter__(self):
         raise NotImplementedError
@@ -64,7 +67,6 @@ class base_channel(object):
 class general_channel(base_channel):
 
     def __post_init__(self):
-
         # try to retrieve the existing event loop. or create a new one.
         try:
             self.engine.event_loop = asyncio.get_event_loop()

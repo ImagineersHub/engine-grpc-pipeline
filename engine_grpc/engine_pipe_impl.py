@@ -188,6 +188,7 @@ class SimulationEngineImpl(BaseEngineImpl):
 
         return self._project_info
 
+    @grpc_call_general()
     def get_service_status(self) -> bool:
         try:
             resp = self.command_parser(
