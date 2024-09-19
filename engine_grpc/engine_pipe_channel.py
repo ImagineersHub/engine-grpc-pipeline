@@ -45,12 +45,15 @@ class base_channel(object):
 
     engine: EngineAbstract
 
-    channel: str
+    channel: str = None
 
     def __post_init__(self):
-        self.grpc_cfg: GrpcChannelConfig = GrpcChannelConfig.retrieve_grpc_cfg(
-            engine=self.engine.engine_platform)
-        if not self.channel:
+
+        if self.engine.channel != None:
+            self.channel = self.engine.channel
+        else:
+            self.grpc_cfg: GrpcChannelConfig = GrpcChannelConfig.retrieve_grpc_cfg(
+                engine=self.engine.engine_platform)
             self.channel = self.grpc_cfg.channel
             # logger.warning(f"Initialize gRPC channel by passing default values {self.channel}")
 

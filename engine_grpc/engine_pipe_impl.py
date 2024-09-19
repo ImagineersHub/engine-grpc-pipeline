@@ -24,6 +24,13 @@ class BaseEngineImpl(EngineAbstract):
     _event_loop: AbstractEventLoop = None
     _stub: Any = None
 
+    # represent the custom channel for establishing the connection
+    # if not specified, it will try to load channel from local runtime environment
+    _channel: str = None
+
+    def __init__(self, channel: str = None):
+        self._channel = channel
+
     @property
     def stub(self):
         return self._stub
@@ -31,6 +38,10 @@ class BaseEngineImpl(EngineAbstract):
     @stub.setter
     def stub(self, value):
         self._stub = value
+
+    @property
+    def channel(self):
+        return self._channel
 
     @property
     def event_loop(self) -> AbstractEventLoop:

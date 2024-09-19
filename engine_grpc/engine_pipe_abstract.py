@@ -23,6 +23,11 @@ class EngineAbstract(ABC):
 
     @property
     @abstractmethod
+    def channel(self):
+        pass
+
+    @property
+    @abstractmethod
     def event_loop(self):
         pass
 
