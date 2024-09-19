@@ -49,11 +49,12 @@ class base_channel(object):
 
     def __post_init__(self):
 
+        self.grpc_cfg: GrpcChannelConfig = GrpcChannelConfig.retrieve_grpc_cfg(
+            engine=self.engine.engine_platform)
+
         if self.engine.channel != None:
             self.channel = self.engine.channel
         else:
-            self.grpc_cfg: GrpcChannelConfig = GrpcChannelConfig.retrieve_grpc_cfg(
-                engine=self.engine.engine_platform)
             self.channel = self.grpc_cfg.channel
             # logger.warning(f"Initialize gRPC channel by passing default values {self.channel}")
 
@@ -71,6 +72,8 @@ class base_channel(object):
         # construct a channel instance
         self.grpc_channel = Channel(
             host=host, port=port, config=cfg, loop=self.engine.event_loop)
+
+        logger.debug(f"Established gRPC channel with channel: {self.channel}")
 
     def __enter__(self):
         raise NotImplementedError
