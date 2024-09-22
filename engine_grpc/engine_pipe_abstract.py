@@ -11,6 +11,7 @@ class EnginePlatform(Enum):
     unreal = auto()
     godot = auto()
     blender = auto()  # refer to https://ciesie.com/post/blender_python_rpc/
+    blender_2nd = auto()
 
 
 class EngineAbstract(ABC):

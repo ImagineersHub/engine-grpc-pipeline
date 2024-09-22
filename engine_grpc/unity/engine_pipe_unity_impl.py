@@ -3,18 +3,25 @@ from ..engine_pipe_impl import SimulationEngineImpl
 from ..engine_pipe_abstract import EnginePlatform
 from typing import List
 from ..engine_stub_interface import GRPCInterface
-from ugrpc_pipe import ProjectInfoResp, GenericResp
+from ugrpc_pipe import ProjectInfoResp, GenericResp, RenderBytesReply
 import os
 import re
 from re import Pattern
 import grpclib
+from ..engine_pipe_decorator import grpc_call_general
 
 
 class UnityEngineImpl(SimulationEngineImpl):
     @property
     def engine_platform(self) -> str:
-
         return EnginePlatform.unity.name
+
+    @grpc_call_general()
+    def RouteImageBytes(self, render_bytes_reply: RenderBytesReply, timeout: float = None) -> GenericResp:
+        resp = self.event_loop.run_until_complete(
+            self.stub.route_image_bytes(render_bytes_reply, timeout=timeout))
+
+        return resp
 
 
 class UnityEditorImpl(SimulationEngineImpl):
