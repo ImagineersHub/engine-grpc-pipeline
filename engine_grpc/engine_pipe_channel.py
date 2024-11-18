@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+import os
 import asyncio
 from dataclasses import dataclass
 from compipe.utils.singleton import Singleton
@@ -27,9 +27,9 @@ class GrpcCacheConfig(metaclass=Singleton):
 
 @dataclass
 class GrpcChannelConfig:
-    description: str
-    channel: str
-    max_msg_length: int
+    description: str = "message_length = 100*1024*1024"
+    channel: str = None
+    max_msg_length: int = 104857600
 
     @classmethod
     def retrieve_grpc_cfg(cls, engine: str) -> GrpcChannelConfig:
@@ -37,7 +37,15 @@ class GrpcChannelConfig:
             raise ValueError(
                 f"Not found matched grpc config for engine: {engine}")
 
-        return GrpcChannelConfig(**grpc_cfg_json)
+        cfg = GrpcChannelConfig(**grpc_cfg_json)
+
+        # try to load specific channel from system environment
+        # allow user to dynamically change the channel by setting the environment variable
+        channel_key = f"{engine.upper()}_GRPC_CHANNEL"
+        if (channel := os.environ.get(channel_key, None)) != None:
+            cfg.channel = channel
+
+        return cfg
 
 
 @dataclass
@@ -49,23 +57,22 @@ class base_channel(object):
 
     def __post_init__(self):
 
+        self.grpc_cfg: GrpcChannelConfig = GrpcChannelConfig.retrieve_grpc_cfg(
+            engine=self.engine.engine_platform)
+
         if self.engine.channel != None:
             self.channel = self.engine.channel
-            cfg = Configuration(http2_stream_window_size=104857600,
-                                http2_connection_window_size=104857600)
-
         else:
-            self.grpc_cfg: GrpcChannelConfig = GrpcChannelConfig.retrieve_grpc_cfg(
-                engine=self.engine.engine_platform)
-
             self.channel = self.grpc_cfg.channel
             # logger.warning(f"Initialize gRPC channel by passing default values {self.channel}")
-            # declare the maximum message length by passing the values from config
-            cfg = Configuration(http2_stream_window_size=self.grpc_cfg.max_msg_length,
-                                http2_connection_window_size=self.grpc_cfg.max_msg_length)
+
         if ':' not in self.channel:
             raise ValueError(
                 'The specified channel content is invalid. Only accept format <ip>:<port> e.g., 127.0.0.1:50051')
+
+        # declare the maximum message length by passing the values from config
+        cfg = Configuration(http2_stream_window_size=self.grpc_cfg.max_msg_length,
+                            http2_connection_window_size=self.grpc_cfg.max_msg_length)
 
         # parse host address and port from the specified channel definition
 
