@@ -37,15 +37,7 @@ class GrpcChannelConfig:
             raise ValueError(
                 f"Not found matched grpc config for engine: {engine}")
 
-        cfg = GrpcChannelConfig(**grpc_cfg_json)
-
-        # try to load specific channel from system environment
-        # allow user to dynamically change the channel by setting the environment variable
-        channel_key = f"{engine.upper()}_GRPC_CHANNEL"
-        if (channel := os.environ.get(channel_key, None)) != None:
-            cfg.channel = channel
-
-        return cfg
+        return GrpcChannelConfig(**grpc_cfg_json)
 
 
 @dataclass
@@ -62,6 +54,10 @@ class base_channel(object):
 
         if self.engine.channel != None:
             self.channel = self.engine.channel
+        elif (channel := os.environ.get(f"{self.engine.engine_platform.upper()}_GRPC_CHANNEL", None)) != None:
+            # try to load specific channel from system environment
+            # allow user to dynamically change the channel by setting the environment variable
+            self.channel = channel
         else:
             self.channel = self.grpc_cfg.channel
             # logger.warning(f"Initialize gRPC channel by passing default values {self.channel}")
