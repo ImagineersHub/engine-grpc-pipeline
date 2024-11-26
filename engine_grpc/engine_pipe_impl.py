@@ -43,6 +43,10 @@ class BaseEngineImpl(EngineAbstract):
     def channel(self):
         return self._channel
 
+    @channel.setter
+    def channel(self, value):
+        self._channel = value
+
     @property
     def event_loop(self) -> AbstractEventLoop:
         return self._event_loop
