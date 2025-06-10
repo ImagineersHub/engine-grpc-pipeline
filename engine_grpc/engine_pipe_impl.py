@@ -64,10 +64,16 @@ class BaseEngineImpl(EngineAbstract):
         any_obj = any_pb2.Any()
         any_obj.type_url = data.type_url
         any_obj.value = data.value
+        
         if any_obj.Is(wrappers_pb2.StringValue.DESCRIPTOR):
             unpacked_str_value = wrappers_pb2.StringValue()
             any_obj.Unpack(unpacked_str_value)
             return unpacked_str_value.value
+        elif any_obj.Is(struct_pb2.Struct.DESCRIPTOR):
+            # Handle struct_pb2.Struct payload (JSON-like data)
+            unpacked_struct = struct_pb2.Struct()
+            any_obj.Unpack(unpacked_struct)
+            return cls._struct_to_dict(unpacked_struct)
         elif any_obj.Is(struct_pb2.ListValue.DESCRIPTOR):
             results = []
             unpacked_list_value = struct_pb2.ListValue()
@@ -80,18 +86,82 @@ class BaseEngineImpl(EngineAbstract):
                     results.append(value.string_value)
                 elif field == 'bool_value':
                     results.append(value.bool_value)
+                elif field == 'struct_value':
+                    results.append(cls._struct_to_dict(value.struct_value))
+                elif field == 'list_value':
+                    results.append(cls._list_value_to_list(value.list_value))
             return results
         elif any_obj.Is(wrappers_pb2.Int32Value.DESCRIPTOR):
             unpacked_int_value = wrappers_pb2.Int32Value()
             any_obj.Unpack(unpacked_int_value)
             return unpacked_int_value.value
+        elif any_obj.Is(wrappers_pb2.Int64Value.DESCRIPTOR):
+            unpacked_int_value = wrappers_pb2.Int64Value()
+            any_obj.Unpack(unpacked_int_value)
+            return unpacked_int_value.value
+        elif any_obj.Is(wrappers_pb2.UInt32Value.DESCRIPTOR):
+            unpacked_int_value = wrappers_pb2.UInt32Value()
+            any_obj.Unpack(unpacked_int_value)
+            return unpacked_int_value.value
+        elif any_obj.Is(wrappers_pb2.UInt64Value.DESCRIPTOR):
+            unpacked_int_value = wrappers_pb2.UInt64Value()
+            any_obj.Unpack(unpacked_int_value)
+            return unpacked_int_value.value
+        elif any_obj.Is(wrappers_pb2.FloatValue.DESCRIPTOR):
+            unpacked_float_value = wrappers_pb2.FloatValue()
+            any_obj.Unpack(unpacked_float_value)
+            return unpacked_float_value.value
+        elif any_obj.Is(wrappers_pb2.DoubleValue.DESCRIPTOR):
+            unpacked_double_value = wrappers_pb2.DoubleValue()
+            any_obj.Unpack(unpacked_double_value)
+            return unpacked_double_value.value
         elif any_obj.Is(wrappers_pb2.BoolValue.DESCRIPTOR):
             unpacked_bool_value = wrappers_pb2.BoolValue()
             any_obj.Unpack(unpacked_bool_value)
             return unpacked_bool_value.value
+        elif any_obj.Is(wrappers_pb2.BytesValue.DESCRIPTOR):
+            unpacked_bytes_value = wrappers_pb2.BytesValue()
+            any_obj.Unpack(unpacked_bytes_value)
+            return unpacked_bytes_value.value
         else:
             logger.warning(
-                f"Not found matched data type to unpack: {any_obj.DESCRIPTOR}")
+                f"Not found matched data type to unpack: {any_obj.type_url}")
+            return None
+
+    @classmethod
+    def _struct_to_dict(cls, struct: struct_pb2.Struct) -> dict:
+        """Convert protobuf Struct to Python dict"""
+        result = {}
+        for key, value in struct.fields.items():
+            result[key] = cls._value_to_python(value)
+        return result
+
+    @classmethod
+    def _list_value_to_list(cls, list_value: struct_pb2.ListValue) -> list:
+        """Convert protobuf ListValue to Python list"""
+        result = []
+        for value in list_value.values:
+            result.append(cls._value_to_python(value))
+        return result
+
+    @classmethod
+    def _value_to_python(cls, value: struct_pb2.Value) -> Any:
+        """Convert protobuf Value to Python object"""
+        field = value.WhichOneof('kind')
+        if field == 'null_value':
+            return None
+        elif field == 'number_value':
+            return value.number_value
+        elif field == 'string_value':
+            return value.string_value
+        elif field == 'bool_value':
+            return value.bool_value
+        elif field == 'struct_value':
+            return cls._struct_to_dict(value.struct_value)
+        elif field == 'list_value':
+            return cls._list_value_to_list(value.list_value)
+        else:
+            logger.warning(f"Unknown protobuf Value field: {field}")
             return None
 
 
