@@ -88,8 +88,6 @@ class GrpcChannelConfig:
     @classmethod
     def retrieve_grpc_cfg(cls, engine: str) -> GrpcChannelConfig:
         if (grpc_cfg_json := env().get_value_by_path(['grpc', engine], None)) == None:
-            logger.warning(
-                f"Not found matched grpc config for engine: {engine}")
             grpc_cfg_json = {
                 "description": "message_length = 100*1024*1024",
                 "max_msg_length": 104857600
